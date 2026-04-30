@@ -22,7 +22,7 @@ from pytorch_metric_learning import losses, miners
 from models.dewi import dewi_resnet50, dewi_resnet101, dewi_resnet152, dewi_resnext50_32x4d, dewi_resnext101_32x8d, dewi_resnext101_64x4d,\
     dewi_wide_resnet50_2, dewi_wide_resnet101_2
 
-device = device = torch.device("cpu")
+device = torch.device("cuda")
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", required=True, help="chosen model")
@@ -57,10 +57,11 @@ def main():
     
     # set all the necessary seeds
     seed_everything(seed)
-    
-    dataset_path_vt = os.path.join(dataset_path)
-    end_epoch = 30 # Increased to train longer after plateau
-    # Read the dataset
+
+    dataset_path_vt = os.path.join(root, "vt_data", "10KDataVT2014-2022")
+    end_epoch = 100 # Increased to train longer after plateau
+
+ # Read the dataset
     trainloader, valloader, testloader = read_dataset(input_size, batch_size, root, dataset_path_vt)
 
     # Initialize the model (it defaults to 102 classes in dewi.py)
